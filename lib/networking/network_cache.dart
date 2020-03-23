@@ -30,8 +30,12 @@ class NetworkCache {
     FileInfo cached = await cache.getFileFromCache(options.optimizedKey);
     if (cached != null) {
       ResultModel model = ResultModel();
-      model.result = options.encrypted ? _decryptAsString(cached.file.readAsStringSync()) : cached.file.readAsStringSync();
-      model.bodyBytes = options.encrypted ? _decrypt(cached.file.readAsStringSync()) : cached.file.readAsBytesSync();
+      model.result = options.encrypted
+          ? _decryptAsString(cached.file.readAsStringSync())
+          : cached.file.readAsStringSync();
+      model.bodyBytes = options.encrypted
+          ? _decrypt(cached.file.readAsStringSync())
+          : cached.file.readAsBytesSync();
       model.json = json.decode(model.result);
       model.url = uri.toString();
 
@@ -42,7 +46,10 @@ class NetworkCache {
       var serializable = (type as SerializableObject);
       dynamic body = model.json;
       if (body is List)
-        model.data = body.map((data) => serializable.fromJson(data)).cast<ResponseType>().toList();
+        model.data = body
+            .map((data) => serializable.fromJson(data))
+            .cast<ResponseType>()
+            .toList();
       else if (body is Map)
         model.data = serializable.fromJson(body) as ResponseType;
       else
