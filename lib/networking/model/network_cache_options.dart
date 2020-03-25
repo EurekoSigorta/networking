@@ -1,9 +1,9 @@
 class NetworkCacheOptions {
   String key;
   bool enabled = false;
+  Duration duration = Duration(days: 30);
   bool recoverFromException = false;
   bool encrypted = false;
-  Duration duration = Duration(days: 30);
 
   String get optimizedKey => "$key${encrypted ? "encrypted" : ""}";
 
@@ -12,6 +12,6 @@ class NetworkCacheOptions {
     this.enabled,
     this.duration,
     this.recoverFromException,
-    this.encrypted
+    this.encrypted,
   });
 }

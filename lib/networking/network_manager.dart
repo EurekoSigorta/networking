@@ -32,12 +32,13 @@ class NetworkManager {
         .type(type)
         .listener(listener)
         .contentType(contentType)
-        .addHeaders(headers)
+        .addHeaders(config.headers, headers)
         .timeout(timeout)
         .isParse(isParse);
   }
 
-  GenericRequestObject<ResponseType> post<RequestType extends Serializable, ResponseType extends Serializable>({
+  GenericRequestObject<ResponseType> post<RequestType extends Serializable,
+      ResponseType extends Serializable>({
     String url,
     dynamic body,
     ResponseType type,
@@ -47,17 +48,19 @@ class NetworkManager {
     Duration timeout,
     bool isParse = false,
   }) {
-    return GenericRequestObject<ResponseType>(MethodType.POST, learning, config, body)
+    return GenericRequestObject<ResponseType>(
+            MethodType.POST, learning, config, body)
         .url(url)
         .type(type)
         .listener(listener)
         .contentType(contentType)
-        .addHeaders(headers)
+        .addHeaders(config.headers, headers)
         .timeout(timeout)
         .isParse(isParse);
   }
 
-  GenericRequestObject<ResponseType> put<RequestType extends Serializable, ResponseType extends Serializable>({
+  GenericRequestObject<ResponseType>
+      put<RequestType extends Serializable, ResponseType extends Serializable>({
     String url,
     dynamic body,
     ResponseType type,
@@ -67,23 +70,31 @@ class NetworkManager {
     Duration timeout,
     bool isParse = false,
   }) {
-    return GenericRequestObject<ResponseType>(MethodType.PUT, learning, config, body)
+    return GenericRequestObject<ResponseType>(
+            MethodType.PUT, learning, config, body)
         .url(url)
         .type(type)
         .listener(listener)
         .contentType(contentType)
-        .addHeaders(headers)
+        .addHeaders(config.headers, headers)
         .timeout(timeout)
         .isParse(isParse);
   }
 
-  GenericRequestObject<ResponseType> delete<RequestType extends Serializable, ResponseType extends Serializable>({
+  GenericRequestObject<ResponseType> delete<RequestType extends Serializable,
+      ResponseType extends Serializable>({
     String url,
     ResponseType type,
     Iterable<Header> headers,
     Duration timeout,
     bool isParse = false,
   }) {
-    return GenericRequestObject<ResponseType>(MethodType.DELETE, learning, config).url(url).type(type).addHeaders(headers).timeout(timeout).isParse(isParse);
+    return GenericRequestObject<ResponseType>(
+            MethodType.DELETE, learning, config)
+        .url(url)
+        .type(type)
+        .addHeaders(config.headers, headers)
+        .timeout(timeout)
+        .isParse(isParse);
   }
 }
