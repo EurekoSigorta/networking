@@ -45,7 +45,6 @@ class GenericRequestObject<ResponseType extends Serializable> {
   ]) {
     _headers = new Set();
     _cookies = new Set();
-    _timeout = Duration(seconds: 60);
     _isParse = false;
   }
 
@@ -160,7 +159,7 @@ class GenericRequestObject<ResponseType extends Serializable> {
       key: key,
       duration: duration,
       recoverFromException: recoverFromException,
-      encrypted: encrypted,
+      encrypted: encrypted ?? false,
     );
 
     return this;
@@ -168,8 +167,7 @@ class GenericRequestObject<ResponseType extends Serializable> {
 
   Future<HttpClientRequest> _request() async {
     final client = HttpClient();
-    client.connectionTimeout =
-        _config == null ? Duration(minutes: 1) : _config.timeout;
+    client.connectionTimeout = _getRequestTimeLimit;
     switch (_methodType) {
       case MethodType.GET:
         return await client.getUrl(_uri);
@@ -187,8 +185,9 @@ class GenericRequestObject<ResponseType extends Serializable> {
   }
 
   Future<dynamic> fetch() async {
-    var request = await _request();
+    var request;
     try {
+      request = await _request();
       _cookies?.forEach((cookie) => request.cookies.add(cookie));
       _headers
           .forEach((header) => request.headers.add(header.key, header.value));
@@ -239,9 +238,7 @@ class GenericRequestObject<ResponseType extends Serializable> {
       }
 
       var response = await request.close().timeout(
-        _config != null
-            ? _config.timeout
-            : _timeout == null ? Duration(minutes: 1) : _timeout,
+        _getRequestTimeLimit,
         onTimeout: () {
           throw TimeoutException("Timeout");
         },
@@ -365,6 +362,10 @@ class GenericRequestObject<ResponseType extends Serializable> {
   void enqueue() {
     NetworkQueue.instance.add(this);
   }
+
+  Duration get _getRequestTimeLimit => _timeout != null
+      ? _timeout
+      : _config != null ? _config.timeout : Duration(minutes: 1);
 
   @override
   bool operator ==(Object other) =>

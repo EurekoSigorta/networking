@@ -93,8 +93,8 @@ class NetworkManager {
             MethodType.DELETE, learning, config)
         .url(url)
         .type(type)
-          ..addHeaders(config.headers, headers)
-              .timeout(timeout)
-              .isParse(isParse);
+        .addHeaders(config.headers, headers)
+        .timeout(timeout)
+        .isParse(isParse);
   }
 }
